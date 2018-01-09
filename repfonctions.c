@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-#include "headerrep.h"
+#include "header_rep.h"
 
 int gestionRep(joueur rep[], int id) {
     int choix=0;
@@ -44,7 +44,7 @@ int gestionRep(joueur rep[], int id) {
         enter=0;
     }
     while(choix != 5);
-    return (EXIT_SUCCESS);
+    return (id);
 }
 
 int printMenu() {

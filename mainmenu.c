@@ -11,7 +11,7 @@
  * Created on 22 décembre 2017, 23:18
  */
 
-#include "headermenu.h"
+#include "header_menu.h"
 
 /*
  * 
@@ -21,8 +21,6 @@ int main(int argc, char** argv) {
     joueur rep[REP];
     initRep(rep);
     id=5;
-    //liarDice(rep);
     id=choiceMainMenu(rep, id);
-
     return (EXIT_SUCCESS);
 }
