@@ -24,6 +24,7 @@ typedef struct //Joueur
     char nom[NOM];
     int score;
     int pointsTournoi;
+    int id;
 }player;
 
 
@@ -32,7 +33,7 @@ void initTab(char tableau[nblignes][nbcolonnes]);
 int modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int);
 void afficherTab(char tableau[nblignes][nbcolonnes]);
 int testGagnant(char tableau[nblignes][nbcolonnes], player repmorp[]);
-void tournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int);
+void tournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int, joueur rep[], int id);
 void initPointsTournoi(player repmorp[]);
 int testGagnantTournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int, int);
 void modifTabTournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int, int, int);
