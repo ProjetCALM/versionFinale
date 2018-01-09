@@ -7,15 +7,15 @@
 //  Copyright © 2017 Projet CALM. All rights reserved.
 //
 
-#include "headermorpion.h"
+#include "header_morpion.h"
 
 char tableau[nblignes][nbcolonnes];
 int i, choix, nombreJoueurs, niveau = 0;
 
-void morpion(joueur rep[]) {
+void morpion(joueur rep[], int id) {
     player repmorp[REP];
-    int p=0;
-    initJoueur(repmorp, rep, p);
+    int p=0, quit=0;
+    initJoueur(repmorp, rep, p, id);
     printf("*** Bienvenue sur le jeu des morpions ! ***\n\n");
     
     while(i != 1){
@@ -37,10 +37,10 @@ void morpion(joueur rep[]) {
                 afficherTab(tableau); //affiche le jeu (vide)
                 do
                 {
-                    modifTab(tableau, repmorp, i);//enregistre la saisie du player (1 si i est paire, sinon 2).
+                    quit=modifTab(tableau, repmorp, i);//enregistre la saisie du player (1 si i est paire, sinon 2).
                     i++;
                 }
-                while(!testGagnant(tableau, repmorp));//test si 3 mêmes cractères sont alignés, si oui, ajoute des points au score du gagnant et le félicite.
+                while(!testGagnant(tableau, repmorp) && quit == 0);//test si 3 mêmes cractères sont alignés, si oui, ajoute des points au score du gagnant et le félicite.
                 break;
             case 2 :
                 printf("Saisir le nombre de players (4 ou 8) :\n");
@@ -62,14 +62,20 @@ void morpion(joueur rep[]) {
     }
 }
 
-void initJoueur(player repmorp[], joueur rep[], int p) {
-    int i=0, j=0;
-    for (i=0; i<p; i++) {
-        repmorp[i].score=rep[i].score;
-        strcpy(repmorp[i].nom, rep[i].nom);
+void initJoueur(player repmorp[], joueur rep[], int part, int id) {
+    int temp=0, i=0, j=0;
+    printf("Choisir les participants :\n");
+    printRep(rep, id);
+    printf("\nSelection\n");
+    for(i=0; i<part; i++) {
+        printf("Joueur %d : ", i+1);
+        scanf("%d", &temp);
+        repmorp[i].score=rep[temp].score;
+        strcpy(repmorp[i].nom, rep[temp].nom);
         repmorp[i].pointsTournoi=0;
     }
 }
+
 
 void initTab(char tableau[nblignes][nbcolonnes])
 {
@@ -86,9 +92,8 @@ void initTab(char tableau[nblignes][nbcolonnes])
     
 }
 
-void modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int i)
-{
-    
+int modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int i) {
+    int quit=0;
     int colonne;
     int ligne;
     if(i%2 == 0){
@@ -105,6 +110,9 @@ void modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int i)
         scanf("%d", &ligne);
         printf("\nChoisir une colonne :\n");
         scanf("%d",&colonne);
+        if (ligne == 0 || colonne == 0) {
+            quit=1;
+        }
     }
         tableau [ligne -1][colonne -1] ='X';
     afficherTab(tableau);
@@ -114,6 +122,9 @@ void modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int i)
     scanf("%d", &ligne);
         printf("\nChoisir une colonne :\n");
     scanf("%d",&colonne);
+    if (ligne == 0 || colonne == 0) {
+            quit=1;
+        }
     system("cls");
     while(tableau [ligne -1][colonne -1] != ' '){
         afficherTab(tableau);
@@ -126,7 +137,7 @@ void modifTab(char tableau[nblignes][nbcolonnes], player repmorp[], int i)
         tableau [ligne -1][colonne -1] ='O';
     afficherTab(tableau);
     }
-    
+    return quit;
 }
 
 void afficherTab(char tableau[nblignes][nbcolonnes])
@@ -155,13 +166,13 @@ int testGagnant(char tableau[nblignes][nbcolonnes], player repmorp[])
         if(somme==264)
         {
             printf("Felicitations %s, tu remporte la partie !\n", repmorp[0].nom);
-            repmorp[0].score+=1;
+            repmorp[0].score+=100;
             return 1;
         }
         if(somme==237)
         {
             printf("Felicitations %s, tu remporte la partie !\n", repmorp[1].nom);
-            repmorp[1].score+=1;
+            repmorp[1].score+=100;
             return 1;
         }
     }
@@ -173,13 +184,13 @@ int testGagnant(char tableau[nblignes][nbcolonnes], player repmorp[])
         if(somme==264)
         {
             printf("Felicitations %s, tu remporte la partie !\n", repmorp[0].nom);
-            repmorp[0].score+=1;
+            repmorp[0].score+=100;
             return 1;
         }
         if(somme==237)
         {
             printf("Felicitations %s, tu remporte la partie !\n", repmorp[1].nom);
-            repmorp[1].score+=1;
+            repmorp[1].score+=100;
             return 1;
         }
     }
@@ -187,14 +198,14 @@ int testGagnant(char tableau[nblignes][nbcolonnes], player repmorp[])
        (tableau[0][2] + tableau[1][1] + tableau[2][0] == 264))
     {
         printf("Felicitations %s, tu remporte la partie !\n", repmorp[0].nom);
-        repmorp[0].score+=1;
+        repmorp[0].score+=100;
         return 1;
     }
     if((tableau[0][0] + tableau[1][1] + tableau[2][2] == 237) ||
        (tableau[0][2] + tableau[1][1] + tableau[2][0] == 237))
     {
         printf("Felicitations %s, tu remporte la partie !\n", repmorp[1].nom);
-        repmorp[1].score+=1;
+        repmorp[1].score+=100;
         return 1;
     }
     /* Test si le tableau est plein :*/
@@ -420,7 +431,7 @@ void tournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int nombreJou
             char car;
             for(i=0; i<4; i++){
                 if(repmorp[i].pointsTournoi == 2){
-                    repmorp[i].score += 10;
+                    repmorp[i].score += 500;
                     printf("10 points ont etes ajoutes au score de %s pour avoir remporte le tournoi !\n", repmorp[i].nom);
                     printf("\n* Saisir un caractere pour continuer. *\n");
                     scanf(" %c", &car);
@@ -494,7 +505,7 @@ void tournoi(char tableau[nblignes][nbcolonnes], player repmorp[], int nombreJou
             while(!testGagnantTournoi(tableau, repmorp, gagnants[0], gagnants[1]));
             for(i=0, j=0; i<8; i++){
                 if(repmorp[i].pointsTournoi == 3){
-                    repmorp[i].score += 20;
+                    repmorp[i].score += 1000;
                     printf("20 points ont etes ajoutes au score de %s pour avoir remporte le tournoi !\n", repmorp[i].nom);
                     printf("\n* Saisir un caractere pour continuer. *\n");
                     scanf(" %c", &car);
