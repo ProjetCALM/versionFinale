@@ -78,7 +78,7 @@ void turn(player table[], int p) {
                         fflush(stdin);
                         printf("Press [Enter] to continue.");
                         while (enter != '\r' && enter != '\n') { enter = getchar(); }
-                        if(entery)
+                        if(enter == '0') {end=p-1; i=p;}
                         enter=0;
                     }
                     else
@@ -116,6 +116,7 @@ void turn(player table[], int p) {
                         fflush(stdin);
                         printf("Press [Enter] to continue.");
                         while (enter != '\r' && enter != '\n') { enter = getchar(); }
+                        if(enter == '0') {end=p-1; i=p;}
                         enter=0;
                         rnd=0;
                         i=p;
