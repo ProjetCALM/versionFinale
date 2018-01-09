@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "headerrep.h"
+#include "header_rep.h"
 
 #define NOM ((int)100) //taille max du nom de joueur
 #define REP ((int)50) //taille max du répertoire de joueurs
@@ -24,7 +24,9 @@ int printMainMenu();
 int choiceMainMenu(joueur rep[], int);
 int printGameMenu();
 int choiceGameMenu(joueur rep[], int);
+void tabScores(joueur rep[], int);
 
-void morpion(joueur rep[]);
-void liarDice(joueur rep[]);
-
+void morpion(joueur rep[], int);
+void liarDice(joueur rep[], int);
+void bataillenavale(joueur rep[], int);
+void jack(joueur rep[]);
