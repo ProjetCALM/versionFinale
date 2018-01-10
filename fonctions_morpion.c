@@ -67,7 +67,7 @@ void initJoueur(player repmorp[], joueur rep[], int part, int id) {
     int temp=0, i=0, j=0;
     printf("Choisir les participants :\n");
     printRep(rep, id);
-    printf("\nSelection\n");
+    printf("\nSelection (entrer l'ID du joueur)\n");
     for(i=0; i<part; i++) {
         printf("Joueur %d : ", i+1);
         scanf("%d", &temp);

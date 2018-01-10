@@ -11,7 +11,7 @@ void liarDice(joueur rep[], int id) {
     int p=0, hu=0, ai=0, ch=0, i=0;
     srand(time(0));
     system("cls");
-    printf("**** LIAR'S DICE ****\n\n1 - Lancer une partie\n2 - Retour\n\nChoix : ");
+    printf("**** MENTEUR ****\n\n1 - Lancer une partie\n2 - Retour\n\nChoix : ");
     scanf("%d", &ch);
     if(ch == 2)
     {
@@ -19,8 +19,12 @@ void liarDice(joueur rep[], int id) {
     }
     else 
     {
-        printf("\nEntrer nombre de participants : ");
-        scanf("%d", &p);
+        do {
+            printf("\nEntrer nombre de participants : ");
+            scanf("%d", &p);
+            if(p < 1) { printf("Vous ne pouvez pas jouer seul.\n");}
+        }
+        while(p < 1);
         printf("Entrer le nombre de joueurs (les places restantes seront remplies par des AIs) : ");
         scanf("%d", &hu);
         ai=p-hu;
@@ -28,9 +32,8 @@ void liarDice(joueur rep[], int id) {
         player table[p]; //crée un tableau contenant toutes les données de tous les joueurs de la table
         initTable(table, rep, hu, id);
         initAI(table, ai, hu);
-        printf("Initialise");
         turn(table, p);
-        for(i=0; i<p; i++) {
+        for(i=0; i<p; i++) {//permet d'attribuer les scores après victoire
             if(table[i].out=0) {
                 table[i].score+=p*300;
             }
@@ -76,8 +79,8 @@ void turn(player table[], int p) {
                     {
                         printf("%s parie sur %d faces affichant %d.\n\n", table[i].nom, table[i].betnb, table[i].betface);
                         fflush(stdin);
-                        printf("Press [Enter] to continue.");
-                        while (enter != '\r' && enter != '\n') { enter = getchar(); }
+                        printf("Appuyez sur [Enter] pour continuer ou [0] pour quitter.");
+                        while (enter != '\r' && enter != '\n' && enter != '0') { enter = getchar(); }
                         if(enter == '0') {end=p-1; i=p;}
                         enter=0;
                     }
@@ -101,7 +104,7 @@ void turn(player table[], int p) {
                         }
                         else if (table[prec].dicenb <= liecheck)
                         {
-                            printf("Il y avait un total de %d des affichant %d. Le joueur precedent disait la verite. %s perd un de.\nTout le monde relance les des.\n", liecheck, table[i].betface, table[i].nom);
+                            printf("Il y avait un total de %d des affichant %d. Le joueur precedent disait la verite. %s perd un de.\nTout le monde relance les des.\n", liecheck, table[prec].betface, table[i].nom);
                             table[i].dice[table[i].dicenb]=0;
                             table[i].dicenb--;//retire un dé
                             if (table[i].dicenb == 0)
@@ -114,8 +117,8 @@ void turn(player table[], int p) {
                         }
                         chAI=0;
                         fflush(stdin);
-                        printf("Press [Enter] to continue.");
-                        while (enter != '\r' && enter != '\n') { enter = getchar(); }
+                        printf("Appuyez sur [Enter] pour continuer ou [0] pour quitter.");
+                        while (enter != '\r' && enter != '\n' && enter != '0') { enter = getchar(); }
                         if(enter == '0') {end=p-1; i=p;}
                         enter=0;
                         rnd=0;
@@ -129,7 +132,7 @@ void turn(player table[], int p) {
                 {
                     if(rnd == 1) 
                     {
-                    printf("ROLL THE DICE !\n");
+                    printf("Appuyez sur [Enter] pour lancer les des.\n");
                     fflush(stdin);
                     while (enter != '\r' && enter != '\n') { enter = getchar(); }
                     enter=0;
@@ -141,7 +144,7 @@ void turn(player table[], int p) {
                         printTheDice(table[i]);
                     }
             
-                    printf("1 - Parier\n2 - Call liar\n3 - Quitter la partie\nChoix : ");
+                    printf("1 - Parier\n2 - Declarer menteur\n3 - Quitter la partie\nChoix : ");
                     scanf("%d", &ch);
                     
                     switch(ch) {
@@ -219,9 +222,10 @@ void turn(player table[], int p) {
                                     
                                 }
                                 fflush(stdin);
-                                printf("Press [Enter] to continue.");
-                                while (enter != '\r' && enter != '\n') { enter = getchar(); }
-                                enter=0;
+                            printf("Appuyez sur [Enter] pour continuer ou [0] pour quitter.");
+                            while (enter != '\r' && enter != '\n' && enter != '0') { enter = getchar(); }
+                            if(enter == '0') {end=p-1; i=p;}
+                            enter=0;
                             }
                             liecheck=0;//réinitialise à 0 pour le test suivant
                             rnd=0;
@@ -255,7 +259,7 @@ void initTable(player table[], joueur rep[], int hu, int id) {
     int temp=0, i=0, j=0;
     printf("Choisir les participants :\n");
     printRep(rep, id);
-    printf("\nSelection\n");
+    printf("\nSelection (entrer l'ID du joueur)\n");
     for(i=0; i<hu; i++) {
         printf("Joueur %d : ", i+1);
         scanf("%d", &temp);
@@ -289,11 +293,12 @@ void initAI(player table[], int ai, int hu) {
 }
 
 int turnAI(player table[], int prec, int p, int cur) {//prec=joueur précédent, cur=joueur actuel, p=participants
-    int choice=0, temp=0, max=0, face=2, i=0, j=0; //max permet de trouver
-    for(j=0; j<6; j++) {//permet à l'AI de compter le nombre de faces pour déterminer ses chances
+    int choice=0, temp=0, max=0, face=2, i=0, j=2; //max permet de trouver
+    for(j=2; j<=6; j++) {//permet à l'AI de compter le nombre de faces pour déterminer ses chances
         temp=countFace(table, cur, j);
-        }
         if(temp > max) {max=temp; face=j;}
+    }
+        
     if(table[prec].betnb > (totalDice(table, p)/3) + countFace(table, cur, table[prec].betface) + rand()%2) //fait une estimation pour deviner si le joueur précédent ment ou pas 
     {
         choice=2;
@@ -303,7 +308,6 @@ int turnAI(player table[], int prec, int p, int cur) {//prec=joueur précédent,
         choice=1;
         if(table[prec].betface != 6) {table[cur].betface = table[prec].betface+rand()%2;}
         if(table[cur].betface > 6) {table[cur].betface = 6;}
-        else {table[cur].betface=6;}
         table[cur].betnb=table[prec].betnb+rand()%3+1;
     }
     else if(face > table[prec].betface) {

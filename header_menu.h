@@ -29,4 +29,4 @@ void tabScores(joueur rep[], int);
 void morpion(joueur rep[], int);
 void liarDice(joueur rep[], int);
 void bataillenavale(joueur rep[], int);
-void jack(joueur rep[]);
+void jack(joueur rep[], int);

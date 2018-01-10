@@ -5,7 +5,6 @@ void bataillenavale(joueur rep[], int id) {
     /*variables*/
     player J;
     int choix;
-    J=initPlayer(J, rep, id);
     int tab1[LIN][COL]; /*grille du player 1*/
     int tab2[LIN][COL]; /*grille du player 2*/
     int grille1[LIN][COL]; /*grille d'attaque de j2*/
@@ -14,17 +13,14 @@ void bataillenavale(joueur rep[], int id) {
     J.compteurj2 = 0;
     /*debut du jeu*/
     printf("\t\t\t\tBATAILLE NAVALE\n\n");
-    printf("Saisir le nom du player 1 : ");
-    scanf("%s", J.nom1);
-    printf("Saisir le nom du player 2 : ");
-    scanf("%s", J.nom2);
+    J=initPlayer(J, rep, id);
     /*initialisation de la grille 1*/
     affiche1(tab1); 
     placement1(tab1, J);
     bateaux1(tab1);
     continuer(choix);
     if(choix != 1){
-        return (EXIT_SUCCESS);
+        return;
     }
     /*initialisation de la grille 2*/
     printf("\t\t\t\tBATAILLE NAVALE\n\n");
@@ -33,7 +29,7 @@ void bataillenavale(joueur rep[], int id) {
     bateaux2(tab2);
     continuer(choix);
     if(choix != 1){
-        return (EXIT_SUCCESS);
+        return;
     }
     /*fin du placement des bateaux*/
     /*début de la partie*/
@@ -46,19 +42,19 @@ player initPlayer(player J, joueur rep[], int id) {
     int temp=0;
     printf("Choisir les participants :\n");
     printRep(rep, id);
-    printf("\nSelection\n");
+    printf("\nSelection (entrer l'ID du joueur)\n");
     printf("Joueur 1 : ");
     scanf("%d", &temp);
-    J.score1=rep[temp].score;
-    strcpy(J.nom1, rep[temp].nom);
+    J.score1=rep[temp-1].score;
+    strcpy(J.nom1, rep[temp-1].nom);
     J.compteurj1=0;
-    J.id1=temp;
+    J.id1=temp-1;
     printf("Joueur 2 : ");
-    scanf("%d", &temp);
-    J.score2=rep[temp].score;
-    strcpy(J.nom2, rep[temp].nom);
+    scanf("%d", &temp-1);
+    J.score2=rep[temp-1].score;
+    strcpy(J.nom2, rep[temp-1].nom);
     J.compteurj2=0;
-    J.id2=temp;
+    J.id2=temp-1;
     return J;
 }
 
@@ -266,7 +262,7 @@ void boucleatt(int grille1[LIN][COL], int tab1[LIN][COL], int grille2[LIN][COL],
     J = attaque1(grille2, tab2, J);
     choix = continuer(choix);
     if(choix != 1){
-        return (EXIT_SUCCESS);
+        return;
     }
         /*1ère attaque de j2*/
         bateaux2(tab2);
@@ -275,7 +271,7 @@ void boucleatt(int grille1[LIN][COL], int tab1[LIN][COL], int grille2[LIN][COL],
         J = attaque2(grille1, tab1, J);
         choix = continuer(choix);
         if(choix != 1){
-            return (EXIT_SUCCESS);
+            return;
         }
             /*boucle d'attaque*/
             while(J.compteurj1 < 5 && J.compteurj2 < 5){
@@ -284,7 +280,7 @@ void boucleatt(int grille1[LIN][COL], int tab1[LIN][COL], int grille2[LIN][COL],
                 J = attaque1(grille2, tab2, J);
                 continuer(choix);
                 if(choix != 1){
-                    return (EXIT_SUCCESS);
+                    return;
                 }
                 /*attaque de j2*/
                 bateaux2(tab2);
@@ -292,7 +288,7 @@ void boucleatt(int grille1[LIN][COL], int tab1[LIN][COL], int grille2[LIN][COL],
                 J = attaque2(grille1, tab1, J);
                 continuer(choix);
                 if(choix != 1){
-                    return (EXIT_SUCCESS);
+                    return;
                 }
             }
             /*fin de partie*/

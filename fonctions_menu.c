@@ -69,7 +69,7 @@ int choiceGameMenu(joueur rep[], int id) {
                 break;
                 
             case 3:
-                jack(rep);
+                jack(rep, id);
                 break;
                 
             case 4:

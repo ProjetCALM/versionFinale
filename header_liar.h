@@ -33,8 +33,6 @@ typedef struct Player
 }player;
 
 
-
-void letTheGameBegin(player table[]);
 void turn(player table[], int);
 void initTable(player table[], joueur rep[], int, int);
 void initAI(player table[], int, int);

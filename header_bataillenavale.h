@@ -10,7 +10,7 @@
 #define NOM ((int)100)
 /*joueurs*/
 
-typedef struct Player{
+typedef struct {
     char nom1[NOM];
     char nom2[NOM];
     int score1;
